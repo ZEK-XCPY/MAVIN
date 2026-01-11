@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "GPT Inspired Web App",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZEK-XCPY/MAVIN.git"
+  },
+  "author": "Mohammad Zaid",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ZEK-XCPY/MAVIN/issues"
+  },
+  "homepage": "https://github.com/ZEK-XCPY/MAVIN#readme",
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mongoose": "^9.1.2",
+    "morgan": "^1.10.1",
+    "nodemon": "^3.1.11"
+  }
+}
