@@ -28,7 +28,7 @@ app.use(errorHandler);
 //routes path
 const authRoutes = require('./routes/authRoutes')
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 //API routes
 app.use('/api/v1/auth', authRoutes)
