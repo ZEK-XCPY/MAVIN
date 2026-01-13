@@ -8,7 +8,8 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const colors = require('colors');
 const connectDB = require('./config/db')
-
+const errorHandler = require('./middlewares/errorMiddleware')
+const bcrypt = require('bcryptjs');
 //dotenv
 dotenv.config();
 
@@ -20,6 +21,9 @@ app.use(cors());
 app.use(bodyParser.json(bodyParser.urlencoded({ extended: true })));
 app.use(morgan('dev'))
 app.use(express.json());  
+app.use(bodyParser.urlencoded({extended:false}))
+app.use(errorHandler);
+
 
 //routes path
 const authRoutes = require('./routes/authRoutes')
