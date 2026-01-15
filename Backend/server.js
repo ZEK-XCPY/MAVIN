@@ -1,38 +1,46 @@
-const express = require('express');
-const app = express();
+require("dotenv").config(); 
 
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const morgan = require('morgan');
-const colors = require('colors');
-const connectDB = require('./config/db')
-const errorHandler = require('./middlewares/errorMiddleware')
-const bcrypt = require('bcryptjs');
-//dotenv
-dotenv.config();
+const express = require("express");
+const morgan = require("morgan");
+const cors = require("cors");
+const colors = require("colors");
+const bodyParser = require("body-parser");
 
-//connect to database
+const connectDB = require("./config/db");
+const errorHandler = require("./middlewares/errorMiddleware");
+
+// routes
+const authRoutes = require("./routes/authRoutes");
+
+
 connectDB();
 
-//middlewares
+// app
+const app = express();
+
+// middlewares
 app.use(cors());
-app.use(bodyParser.json(bodyParser.urlencoded({ extended: true })));
-app.use(morgan('dev'))
-app.use(express.json());  
-app.use(bodyParser.urlencoded({extended:false}))
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+
+// routes
+app.use("/api/v1/auth", authRoutes);
+
+
+// app.use("/api/v1/openai", require("./routes/openaiRoutes"));
+
+// error middleware 
 app.use(errorHandler);
 
-
-//routes path
-const authRoutes = require('./routes/authRoutes')
-
+// port
 const PORT = process.env.PORT || 8080;
 
-//API routes
-app.use('/api/v1/auth', authRoutes)
-
+// listen
 app.listen(PORT, () => {
-    console.log(`Server running in ${process.env.DEV_MODE} and  is running on port ${PORT}`.bgGreen.black);
-})
+  console.log(
+    `Server running in ${process.env.DEV_MODE} mode on port ${PORT}`
+      .bgCyan.white
+  );
+});

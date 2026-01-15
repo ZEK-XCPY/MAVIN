@@ -1,9 +1,7 @@
-class errorResponse extends Error{
-  constructor(message,satatusCode){
-    SuppressedError(message)
-    this.statusCode = statusCode
-    super(message)
-    
+class errorResponse extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode;
   }
 }
 

@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const JWT = require("jsonwebtoken");
-const cookie = require("cookie");
+
+
 //models
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: [true, "Username is required"],
+    required: [true, "Username is Required"],
   },
   email: {
     type: String,
@@ -15,8 +16,8 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "Enter your Password"],
-    minlength: [6, "minimum length should be 6 chars long "],
+    required: [true, "Password is required"],
+    minlength: [6, "Password length should be 6 character long"],
   },
   customerId: {
     type: String,
@@ -29,37 +30,37 @@ const userSchema = new mongoose.Schema({
 });
 
 //hashed password
-userSchema.pre("save", async function (next) {
-  //update
-  if (!this.isModified("password")) {
-    next();
-  }
-  //password hashing done
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
-//matched password checking
+
+//match password
 userSchema.methods.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-//token generation
-userSchema.methods.getSignedToken = function (res) {
-  const accessToken = JWT.sign({ id: this_id }, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: process.env.JWT_ACCESS_EXPIREIN,
-  });
+//SIGN TOKEN
+userSchema.methods.getSignedToken = function () {
+  const accessToken = JWT.sign(
+    { id: this._id },
+    process.env.JWT_ACCESS_SECRET,
+    { expiresIn: process.env.JWT_ACCESS_EXPIREIN }
+  );
+
   const refreshToken = JWT.sign(
-    { id: this_id },
+    { id: this._id },
     process.env.JWT_REFRESH_TOKEN,
     { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIREIN }
   );
-  res.cookie("refreshToken", `${refreshToken}`, {
-    maxAge: 86400 * 7000,
-    httpOnly: true,
-  });
+
+  return { accessToken, refreshToken };
 };
+
+
 
 const User = mongoose.model("User", userSchema);
 
